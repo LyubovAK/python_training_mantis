@@ -8,3 +8,7 @@ class Project:
 
     def __eq__(self, other):
         return self.name == other.name
+
+    def sorted_name(self):
+        if self.name:
+            return self.name

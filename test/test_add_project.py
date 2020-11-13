@@ -1,8 +1,19 @@
 from model.project import Project
+import random
+import string
+
+
+def random_name(prefix, maxlen):
+    symbols = string.ascii_letters
+    return prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
 
 
 def test_add_project(app):
     old_projects = app.project.get_project_list()
-    app.project.add_project(Project(name="test"))
+    project_name = random_name("name_", 10)
+    project = Project(name=project_name)
+    app.project.add_project(project)
     new_projects = app.project.get_project_list()
     assert len(old_projects) + 1 == len(new_projects)
+    old_projects.append(project)
+    assert sorted(old_projects, key=Project.sorted_name) == sorted(new_projects, key=Project.sorted_name)
