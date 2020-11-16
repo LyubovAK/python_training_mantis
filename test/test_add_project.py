@@ -8,12 +8,12 @@ def random_name(prefix, maxlen):
     return prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
 
 
-def test_add_project(app):
-    old_projects = app.soap.get_project_list()
+def test_add_project(app, config):
+    old_projects = app.soap.get_project_list(app.base_url, config["webadmin"]["username"], config["webadmin"]["password"])
     project_name = random_name("name_", 10)
     project = Project(name=project_name)
     app.project.add_project(project)
-    new_projects = app.soap.get_project_list()
+    new_projects = app.soap.get_project_list(app.base_url, config["webadmin"]["username"], config["webadmin"]["password"])
     assert len(old_projects) + 1 == len(new_projects)
     old_projects.append(project)
     assert sorted(old_projects, key=Project.sorted_name) == sorted(new_projects, key=Project.sorted_name)
