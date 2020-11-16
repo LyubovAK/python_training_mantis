@@ -9,11 +9,12 @@ def random_name(prefix, maxlen):
 
 
 def test_add_project(app, config):
-    old_projects = app.soap.get_project_list(app.base_url, config["webadmin"]["username"], config["webadmin"]["password"])
+    user_info = config["webadmin"]
+    old_projects = app.soap.get_project_list(app.base_url, user_info["username"], user_info["password"])
     project_name = random_name("name_", 10)
     project = Project(name=project_name)
     app.project.add_project(project)
-    new_projects = app.soap.get_project_list(app.base_url, config["webadmin"]["username"], config["webadmin"]["password"])
+    new_projects = app.soap.get_project_list(app.base_url, user_info["username"], user_info["password"])
     assert len(old_projects) + 1 == len(new_projects)
     old_projects.append(project)
     assert sorted(old_projects, key=Project.sorted_name) == sorted(new_projects, key=Project.sorted_name)
